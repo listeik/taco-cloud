@@ -10,10 +10,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Data
+@Table("Taco_Cloud_Order")
 public class TacoOrder implements Serializable {
 	private static final long serialVersionUID = 1L;
+	@Id
 	private Long id;
 	private Date placedAt;
 	@NotBlank(message="Delivery name is required")
