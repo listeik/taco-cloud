@@ -1,8 +1,10 @@
 package tacos.web;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,11 @@ public class DesignTacoController {
 	}
 	@ModelAttribute
 	public void addIngredientsToModel(Model model) {
-		List<Ingredient> ingredients = ingredientRepo.findAll();
+		Iterable<Ingredient> ingredients1 = ingredientRepo.findAll();
+		List<Ingredient> ingredients = StreamSupport.stream(
+				ingredients1.spliterator(),
+				false  // false = не параллельный поток
+		).collect(Collectors.toList());
 		Type[] types = Ingredient.Type.values();
 		for (Type type : types) {
 			model.addAttribute(type.toString().toLowerCase(),
