@@ -3,12 +3,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -16,11 +12,14 @@ import org.hibernate.validator.constraints.CreditCardNumber;
 import lombok.Data;
 @Data
 @Entity
+@Table(name="Taco_Order")
 public class TacoOrder implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	@ManyToOne
+	private User user;
 	private Date placedAt = new Date();
 	@NotBlank(message="Delivery name is required")
 	private String deliveryName;
