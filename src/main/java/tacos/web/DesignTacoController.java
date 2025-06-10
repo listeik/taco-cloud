@@ -22,6 +22,7 @@ import tacos.Taco;
 import tacos.TacoOrder;
 import tacos.User;
 import tacos.data.IngredientRepository;
+import tacos.data.TacoRepository;
 import tacos.data.UserRepository;
 
 @Slf4j
@@ -32,13 +33,17 @@ public class DesignTacoController {
 
     private final IngredientRepository ingredientRepo;
 
+    private TacoRepository tacoRepo;
+
     private UserRepository userRepo;
 
     @Autowired
     public DesignTacoController(
             IngredientRepository ingredientRepo,
+            TacoRepository tacoRepo,
             UserRepository userRepo) {
         this.ingredientRepo = ingredientRepo;
+        this.tacoRepo = tacoRepo;
         this.userRepo = userRepo;
     }
 
@@ -87,6 +92,7 @@ public class DesignTacoController {
         if (errors.hasErrors()) {
             return "design";
         }
+        tacoRepo.save(taco);
         tacoOrder.addTaco(taco);
         log.info("Processing taco: {}", taco);
         return "redirect:/orders/current";
