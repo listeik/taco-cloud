@@ -1,49 +1,41 @@
 package tacos.web.api;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tacos.Taco;
 import tacos.TacoOrder;
 import tacos.data.OrderRepository;
-import tacos.data.TacoRepository;
-
-import java.util.Optional;
+import tacos.messagebroker.OrderMessagingService;
 
 @RestController
-@RequestMapping(path="/api/tacos",
-        produces="application/json")
-@CrossOrigin(origins="http://tacocloud:8080")
-public class TacoController {
-    private TacoRepository tacoRepo;
-    private OrderRepository orderRepo;
+@RequestMapping(path = "/api/orders", produces = "application/json")
+@CrossOrigin(origins = "http://localhost:8080") // For development purpose https://127.0.0.1:8443
+public class OrderApiController {
 
-    public TacoController(TacoRepository tacoRepo, OrderRepository orderRepo) {
-        this.tacoRepo = tacoRepo;
+    private final OrderRepository orderRepo;
+
+    private final OrderMessagingService message;
+
+    @Autowired
+    OrderApiController(OrderRepository orderRepo, OrderMessagingService message) {
         this.orderRepo = orderRepo;
+        this.message = message;
     }
 
-    @GetMapping(params="recent")
-    public Iterable<Taco> recentTacos() {
-        PageRequest page = PageRequest.of(
-                0, 12, Sort.by("createdAt").descending());
-        return tacoRepo.findAll(page).getContent();
-    }
-    @GetMapping("/{id}")
-    public ResponseEntity<Taco> tacoById(@PathVariable("id") Long id) {
-        Optional<Taco> optTaco = tacoRepo.findById(id);
-        if (optTaco.isPresent()) {
-            return new ResponseEntity<>(optTaco.get(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    @GetMapping(path="/{orderId}")
+    public TacoOrder getOrder(@PathVariable("orderId") Long orderId){
+        TacoOrder tacoOrder = orderRepo.findById(orderId).get();
+        return tacoOrder;
     }
 
-    @PostMapping(consumes="application/json")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Taco postTaco(@RequestBody Taco taco) {
-        return tacoRepo.save(taco);
+    @PostMapping(consumes = "application/json")
+    public TacoOrder postOrder(@RequestBody TacoOrder order) {
+        TacoOrder sentTaco = orderRepo.save(order);
+        message.sendOrder(sentTaco);
+        return sentTaco;
     }
 
     @PutMapping(path="/{orderId}", consumes="application/json")
@@ -92,4 +84,5 @@ public class TacoController {
             orderRepo.deleteById(orderId);
         } catch (EmptyResultDataAccessException e) {}
     }
+
 }

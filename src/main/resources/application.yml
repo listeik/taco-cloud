@@ -1,10 +1,30 @@
+taco:
+  order:
+    pageSize: 15
+
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
+
   data:
     rest:
       base-path: /data-api
+
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.add.type.headers: false
+    bootstrap-servers: localhost:9092
+
   datasource:
     generate-unique-name: false
     name: tacocloud
+
   application:
     name: taco-cloud
-

@@ -1,6 +1,8 @@
 package tacos.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -44,6 +46,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/design", "/orders").hasRole("USER")
                         .requestMatchers("/h2-console/**").permitAll()  // Разрешаем доступ к H2 Console
+                        .requestMatchers(HttpMethod.POST,"/api/ingredients").hasAuthority("SCOPE_writeIngredients")
+                        .requestMatchers(HttpMethod.DELETE, "/api/ingredients").hasAuthority("SCOPE_deleteIngredients")
                         .requestMatchers("/", "/**").permitAll()
                 )
                 .formLogin(form -> form
@@ -52,9 +56,10 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
                 )
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 // Настройки для H2 Console
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**")  // Отключаем CSRF для H2 Console
+                        .disable()  // Отключаем CSRF
                 )
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.sameOrigin()  // Разрешаем iframe для того же origin

@@ -92,7 +92,6 @@ public class DesignTacoController {
         if (errors.hasErrors()) {
             return "design";
         }
-        tacoRepo.save(taco);
         tacoOrder.addTaco(taco);
         log.info("Processing taco: {}", taco);
         return "redirect:/orders/current";
