@@ -10,11 +10,11 @@ public class RegistrationForm {
     private String street;
     private String city;
     private String state;
-    private String zip;
+    private String email;
     private String phone;
     public User toUser(PasswordEncoder passwordEncoder) {
         return new User(
                 username, passwordEncoder.encode(password),
-                fullname, street, city, state, zip, phone);
+                fullname, street, city, state, email, phone);
     }
 }

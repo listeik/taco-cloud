@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import lombok.extern.slf4j.Slf4j;
+import tacos.Ingredient;
+import tacos.Taco;
 import tacos.TacoOrder;
 import tacos.User;
 import tacos.data.OrderRepository;
+import tacos.email.EmailService;
 
 
 @Slf4j
@@ -21,9 +24,13 @@ import tacos.data.OrderRepository;
 @SessionAttributes("tacoOrder")
 public class OrderController {
 	private OrderRepository orderRepo;
-	public OrderController(OrderRepository orderRepo) {
+	private EmailService emailService;
+
+	public OrderController(EmailService emailService, OrderRepository orderRepo) {
+		this.emailService = emailService;
 		this.orderRepo = orderRepo;
 	}
+
 	@GetMapping("/current")
 	public String orderForm() {
 		return "orderForm";
@@ -35,6 +42,23 @@ public class OrderController {
 							   @AuthenticationPrincipal User user) {
 		if (errors.hasErrors()) {
 			return "orderForm";
+		}
+		try {
+		String contentTaco = "Вы заказали:\n";
+		for (Taco taco : order.getTacos()) {
+			contentTaco+="    " + taco.getName()+":\n";
+			for(Ingredient ingredient:taco.getIngredients()){
+				contentTaco+="        " + ingredient.getName()+"\n";
+			}
+		}
+
+		emailService.sendOrderDetails(
+				user.getEmail(),
+				"Ваш заказ, " + user.getFullname() + "!",
+				contentTaco
+		);}
+		catch (Exception e){
+			log.info("Устарел пароль-код для email");
 		}
 		order.setUser(user);
 		orderRepo.save(order);

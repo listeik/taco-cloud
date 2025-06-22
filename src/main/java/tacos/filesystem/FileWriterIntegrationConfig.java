@@ -15,7 +15,7 @@ public class FileWriterIntegrationConfig {
                 .from(MessageChannels.direct("textInChannel"))
                 .<String, String>transform(t -> t.toUpperCase())
                 .handle(Files
-                        .outboundAdapter(new File("/tmp/sia6/files"))
+                        .outboundAdapter(new File("logs/"))
                         .fileExistsMode(FileExistsMode.APPEND)
                         .appendNewLine(true))
                 .get();

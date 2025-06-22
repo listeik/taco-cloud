@@ -1,8 +1,21 @@
 taco:
   order:
     pageSize: 15
-
+logging:
+  file.name: logs/TacoCloud.log
+  file.max-size: 10MB
+  level: # indicates the type of log info that is shown
+    root: info
+    org.springframework.security: debug
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: sabitovratmir05@gmail.com  # Ваш Gmail
+    password: pgbm unas ymbo zsvo  # Пароль приложений (не основной!)
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true  # Шифрование
   security:
     oauth2:
       resourceserver:
