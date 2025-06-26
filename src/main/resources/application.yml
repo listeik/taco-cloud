@@ -12,7 +12,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: sabitovratmir05@gmail.com  # Ваш Gmail
-    password: pgbm unas ymbo zsvo  # Пароль приложений (не основной!)
+    password: ltom nuzc ozbx vufp  # Пароль приложений (не основной!)
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true  # Шифрование

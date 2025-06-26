@@ -1,15 +1,16 @@
 package tacos.email;
 
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
-    private final JavaMailSender mailSender;
+    private final MessageChannel emailChannel;
 
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+    public EmailService(MessageChannel emailChannel) {
+        this.emailChannel = emailChannel;
     }
 
     public void sendOrderDetails(String toEmail, String topic, String content) {
@@ -17,6 +18,7 @@ public class EmailService {
         message.setTo(toEmail);
         message.setSubject(topic);
         message.setText(content);
-        mailSender.send(message);
+
+        emailChannel.send(MessageBuilder.withPayload(message).build());
     }
 }
