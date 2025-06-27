@@ -20,7 +20,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 @RestResource(rel="tacos", path="tacos")
 public class Taco implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
     @Size(min = 5, message = "Name must be at least 5 characters long")

@@ -36,8 +36,30 @@ spring:
     bootstrap-servers: localhost:9092
 
   datasource:
-    generate-unique-name: false
-    name: tacocloud
+    url: jdbc:postgresql://localhost:5433/tacocloud
+    username: tacocloud
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  flyway:
+    enabled: true
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    clean-disabled: true
+    schemas: public
+    encoding: UTF-8
+
+  jpa:
+    hibernate:
+      ddl-auto: none # Важно: не используйте create-drop с Flyway!
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
   application:
     name: taco-cloud

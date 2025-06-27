@@ -1,0 +1,1 @@
+ALTER TABLE taco ALTER COLUMN taco_order DROP NOT NULL;
