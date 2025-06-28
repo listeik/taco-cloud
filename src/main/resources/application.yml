@@ -41,25 +41,38 @@ spring:
     password: password
     driver-class-name: org.postgresql.Driver
 
-  flyway:
-    enabled: true
-    url: ${spring.datasource.url}
-    user: ${spring.datasource.username}
-    password: ${spring.datasource.password}
-    locations: classpath:db/migration
-    baseline-on-migrate: true
-    clean-disabled: true
-    schemas: public
-    encoding: UTF-8
-
   jpa:
     hibernate:
-      ddl-auto: none # Важно: не используйте create-drop с Flyway!
+      ddl-auto: update # Автоматическое обновление схемы
     show-sql: true
     properties:
       hibernate:
-        format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
-
+        format_sql: true
+  sql:
+    init:
+      mode: always # Запускать data.sql и schema.sql
   application:
     name: taco-cloud
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  info:
+    env:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+info:
+  contact:
+    email: tacoadmin@tacocloud.com
+    phone: 01-8000-451854
+  app:
+    encoding: "@project.build.sourceEncoding@"
+    java:
+      source: "@java.version@"
+      target: "@java.version@"

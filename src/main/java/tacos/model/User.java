@@ -1,5 +1,4 @@
-package tacos;
-import java.io.Serializable;
+package tacos.model;
 import java.util.Arrays;
 import java.util.Collection;
 

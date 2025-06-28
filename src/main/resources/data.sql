@@ -1,10 +1,10 @@
--- Очистка таблиц (в обратном порядке из-за foreign keys)
-TRUNCATE TABLE Ingredient_Ref CASCADE;
-TRUNCATE TABLE Taco CASCADE;
-TRUNCATE TABLE Taco_Order CASCADE;
-TRUNCATE TABLE Ingredient CASCADE;
+-- Очистка данных в правильном порядке (с учетом foreign keys)
+DELETE FROM Ingredient_Ref;
+DELETE FROM Taco;
+DELETE FROM Taco_Order;
+DELETE FROM Ingredient;
 
--- Наполнение ингредиентов
+-- Вставка ингредиентов
 INSERT INTO Ingredient (id, name, type) VALUES
 ('FLTO', 'Flour Tortilla', 'WRAP'),
 ('COTO', 'Corn Tortilla', 'WRAP'),

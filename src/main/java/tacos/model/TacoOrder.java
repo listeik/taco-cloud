@@ -1,4 +1,4 @@
-package tacos;
+package tacos.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.CreditCardNumber;
 import lombok.Data;
+
 @Data
 @Entity
 @Table(name="Taco_Order")

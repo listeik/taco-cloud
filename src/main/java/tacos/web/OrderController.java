@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import lombok.extern.slf4j.Slf4j;
-import tacos.Ingredient;
-import tacos.Taco;
-import tacos.TacoOrder;
-import tacos.User;
+import tacos.model.Ingredient;
+import tacos.model.Taco;
+import tacos.model.TacoOrder;
+import tacos.model.User;
 import tacos.data.OrderRepository;
 import tacos.email.EmailService;
 

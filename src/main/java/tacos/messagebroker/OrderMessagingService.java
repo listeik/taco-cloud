@@ -1,6 +1,6 @@
 package tacos.messagebroker;
 
-import tacos.TacoOrder;
+import tacos.model.TacoOrder;
 
 
 public interface OrderMessagingService {

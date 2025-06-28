@@ -1,12 +1,10 @@
 package tacos.web.api;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tacos.Taco;
-import tacos.TacoOrder;
+import tacos.model.Taco;
 import tacos.data.OrderRepository;
 import tacos.data.TacoRepository;
 
