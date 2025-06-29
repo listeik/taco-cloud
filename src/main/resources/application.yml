@@ -1,76 +1,81 @@
 taco:
   order:
-    pageSize: 15
+    pageSize: ${TACO_ORDER_PAGE_SIZE:15}  # Размер страницы (можно переопределить)
+
 logging:
-  file.name: logs/TacoCloud.log
-  file.max-size: 10MB
-  level: # indicates the type of log info that is shown
-    root: info
-    org.springframework.security: debug
+  file:
+    name: ${LOGGING_FILE_NAME:logs/TacoCloud.log}  # Путь к логам
+    max-size: ${LOGGING_FILE_MAX_SIZE:10MB}         # Макс. размер файла
+  level:
+    root: ${LOGGING_LEVEL_ROOT:info}                # Уровень логирования
+    org.springframework.security: ${LOGGING_LEVEL_SECURITY:debug}
+
 spring:
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: sabitovratmir05@gmail.com  # Ваш Gmail
-    password: ltom nuzc ozbx vufp  # Пароль приложений (не основной!)
+    host: ${SPRING_MAIL_HOST:smtp.gmail.com}       # SMTP-сервер
+    port: ${SPRING_MAIL_PORT:587}                  # Порт
+    username: ${SPRING_MAIL_USERNAME:}             # Email (обязательно указать!)
+    password: ${SPRING_MAIL_PASSWORD:}             # Пароль (обязательно!)
     properties:
       mail.smtp.auth: true
-      mail.smtp.starttls.enable: true  # Шифрование
+      mail.smtp.starttls.enable: true
+
   security:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://localhost:9000/oauth2/jwks
+          jwk-set-uri: ${JWK_SET_URI:}             # URL для JWT (обязательно!)
 
-  data:
-    rest:
-      base-path: /data-api
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5433/tacocloud}  # URL БД
+    username: ${DATASOURCE_USERNAME:tacocloud}      # Логин БД
+    password: ${DATASOURCE_PASSWORD:}               # Пароль БД (обязательно!)
+    driver-class-name: org.postgresql.Driver
 
   kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}  # Адрес Kafka
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
         spring.json.trusted.packages: "*"
         spring.json.add.type.headers: false
-    bootstrap-servers: localhost:9092
-
-  datasource:
-    url: jdbc:postgresql://localhost:5433/tacocloud
-    username: tacocloud
-    password: password
-    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update # Автоматическое обновление схемы
-    show-sql: true
+      ddl-auto: ${SPRING_JPA_DDL_AUTO:update}      # Стратегия DDL (update/validate)
+    show-sql: ${SPRING_JPA_SHOW_SQL:true}          # Показывать SQL в логах?
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+
   sql:
     init:
-      mode: always # Запускать data.sql и schema.sql
+      mode: ${SPRING_SQL_INIT_MODE:always}         # Инициализация БД (always/never)
+
+  data:
+    rest:
+      base-path: /data-api                          # Базовый путь API
+
   application:
-    name: taco-cloud
+    name: taco-cloud                               # Имя приложения
+
 management:
   endpoints:
     web:
       exposure:
-        include: '*'
-  info:
-    env:
-      enabled: true
+        include: '*'                               # Открыть все эндпоинты
   endpoint:
     health:
+      show-details: always
       probes:
         enabled: true
-      show-details: always
+
 info:
   contact:
-    email: tacoadmin@tacocloud.com
-    phone: 01-8000-451854
+    email: tacoadmin@tacocloud.com                 # Публичный email
+    phone: 01-8000-451854                         # Публичный телефон
   app:
     encoding: "@project.build.sourceEncoding@"
     java:
